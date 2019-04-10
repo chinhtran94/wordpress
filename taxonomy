@@ -1,0 +1,34 @@
+function custom_taxonomy() {
+        /* Biến $label chứa các tham số thiết lập tên hiển thị của Taxonomy
+         */
+        $labels = array('name' => 'Taxonomy Name','singular' => 'Taxonomy Name','menu_name' => 'Taxonomy Name');
+        /* Biến $args khai báo các tham số trong custom taxonomy cần tạo
+         */
+        $args = array(
+                'labels'                     => $labels,
+                'hierarchical'               => true,
+                'public'                     => true,
+                'show_ui'                    => true,
+                'show_admin_column'          => true,
+                'show_in_nav_menus'          => true,
+                'show_tagcloud'              => true,
+        );
+        /* Hàm register_taxonomy để khởi tạo taxonomy
+         */
+        register_taxonomy('taxonomy-slug', 'post-type-slug', $args);
+}
+// Hook into the 'init' action
+add_action( 'init', 'custom_taxonomy', 0 );
+
+// Query Taxonomy code
+
+$args = array(
+	'tax_query' => array(
+		array(
+			'taxonomy' => 'taxonomy-slug',
+			'field' => 'slug',
+			'terms' => 'bob'
+		)
+	)
+);
+$query = new WP_Query( $args );
